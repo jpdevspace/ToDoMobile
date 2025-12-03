@@ -1,33 +1,27 @@
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { FlatList, StyleSheet, TextInput, Button, View } from "react-native";
+
+import TodoItem from "./components/TodoItem";
+import TodoInput from "./components/TodoInput";
 
 export default function App() {
-  const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
-  function todoInputHandler(enteredText) {
-    setNewTodo(enteredText);
-  }
-
-  function addTodoHandler() {
-    setTodos((currentTodos) => [...currentTodos, newTodo]);
-    setNewTodo("");
+  function addTodoHandler(newTodo) {
+    setTodos((currentTodos) => [
+      ...currentTodos,
+      { text: newTodo, key: Math.random().toString() },
+    ]);
   }
 
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Type your To Do"
-          onChangeText={todoInputHandler}
-        />
-        <Button title="Add Item" onPress={addTodoHandler}></Button>
-      </View>
+      <TodoInput addTodo={addTodoHandler} />
       <View style={styles.todosContainer}>
-        {todos.map((todo, i) => (
-          <Text key={`${todo}-${i}`}>{todo}</Text>
-        ))}
+        <FlatList
+          data={todos}
+          renderItem={({ item }) => <TodoItem text={item.text} />}
+        />
       </View>
     </View>
   );
@@ -39,22 +33,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    width: "70%",
-    marginRight: 8,
-    padding: 8,
-  },
+
   todosContainer: {
     flex: 5,
   },
