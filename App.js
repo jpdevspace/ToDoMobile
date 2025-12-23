@@ -14,13 +14,25 @@ export default function App() {
     ]);
   }
 
+  function deleteGoalHandler(id) {
+    setTodos((currentTodos) => {
+      return currentTodos.filter((todo) => todo.id !== id);
+    });
+  }
+
   return (
     <View style={styles.appContainer}>
       <TodoInput addTodo={addTodoHandler} />
       <View style={styles.todosContainer}>
         <FlatList
           data={todos}
-          renderItem={({ item }) => <TodoItem text={item.text} />}
+          renderItem={({ item }) => (
+            <TodoItem
+              id={item.id}
+              text={item.text}
+              onDelete={deleteGoalHandler}
+            />
+          )}
         />
       </View>
     </View>

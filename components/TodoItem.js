@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-function TodoItem({ text }) {
+function TodoItem({ id, text, onDelete }) {
   return (
-    <View style={styles.todoItem}>
-      <Text style={styles.todoText}>{text}</Text>
-    </View>
+    <Pressable onPress={onDelete.bind(this, id)}>
+      <View style={styles.todoItem}>
+        <Text style={styles.todoText}>{text}</Text>
+      </View>
+    </Pressable>
   );
 }
 
