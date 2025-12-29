@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import { Button, FlatList, StyleSheet, View } from "react-native";
 
 import TodoItem from "./components/TodoItem";
@@ -12,11 +13,16 @@ export default function App() {
     setModalIsVisible(true);
   }
 
+  function endAddTodoHandler() {
+    setModalIsVisible(false);
+  }
+
   function addTodoHandler(newTodo) {
     setTodos((currentTodos) => [
       ...currentTodos,
       { text: newTodo, key: Math.random().toString() },
     ]);
+    endAddTodoHandler();
   }
 
   function deleteGoalHandler(id) {
@@ -26,26 +32,33 @@ export default function App() {
   }
 
   return (
-    <View style={styles.appContainer}>
-      <Button
-        title="Add New goal"
-        color="#5e0acc"
-        onPress={startAddTodoHandler}
-      />
-      <TodoInput visible={modalIsVisible} addTodo={addTodoHandler} />
-      <View style={styles.todosContainer}>
-        <FlatList
-          data={todos}
-          renderItem={({ item }) => (
-            <TodoItem
-              id={item.id}
-              text={item.text}
-              onDelete={deleteGoalHandler}
-            />
-          )}
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <Button
+          title="Add New goal"
+          color="#a065ec"
+          onPress={startAddTodoHandler}
         />
+        <TodoInput
+          visible={modalIsVisible}
+          addTodo={addTodoHandler}
+          onCancel={endAddTodoHandler}
+        />
+        <View style={styles.todosContainer}>
+          <FlatList
+            data={todos}
+            renderItem={({ item }) => (
+              <TodoItem
+                id={item.id}
+                text={item.text}
+                onDelete={deleteGoalHandler}
+              />
+            )}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -54,6 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
+    backgroundColor: "#1e085a",
   },
 
   todosContainer: {
